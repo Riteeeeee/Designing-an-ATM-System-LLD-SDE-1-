@@ -1,45 +1,32 @@
 # Designing-an-ATM-System-LLD
-1️⃣ Restate the Problem
+📌 Problem Statement
 
 Design an ATM system that allows users to:
 
 Insert a card
 
-Authenticate using PIN
+Authenticate using a PIN
 
-Check balance
+Check account balance
 
 Withdraw cash
 
 Deposit cash
 
-Exit safely
+Exit safely (card ejection)
 
-👉 “Am I understanding the problem correctly?”
+Confirmation:
+“Am I understanding the problem correctly?”
 
-2️⃣ Clarifying Questions
-
-Ask quickly:
-
-Single ATM or multiple ATMs?
-→ Assume single ATM
-
-Multiple accounts per card?
-→ One account per card
-
-Cash types?
-→ Fixed denominations
-
-Concurrent users?
-→ One user at a time
-
-Persistent storage?
-→ In-memory
-
-Network / bank server?
-→ Simulated locally
-
-3️⃣ Requirements
+❓ Clarifying Questions & Assumptions
+Question	Assumption
+Single ATM or multiple ATMs?	Single ATM
+Multiple accounts per card?	One account per card
+Cash denominations?	Fixed denominations
+Concurrent users?	One user at a time
+Persistent storage?	In-memory
+Bank server / network?	Simulated locally
+📋 Requirements
 🔹 Functional Requirements
 
 Card insertion
@@ -52,7 +39,7 @@ Cash withdrawal
 
 Cash deposit
 
-Exit / eject card
+Card ejection / exit
 
 🔹 Non-Functional Requirements
 
@@ -62,98 +49,128 @@ Accurate balance updates
 
 Prevent invalid withdrawals
 
-Maintain consistency
+Maintain system consistency
 
-4️⃣ Assumptions
+🧠 Assumptions
 
 One ATM machine
 
-One user at a time
+One active user session
 
 No real bank server
 
-In-memory data
+In-memory data storage
 
-No encryption (just simulation)
+No encryption (simulation only)
 
-5️⃣ Core Entities
-Entities
-
+🧱 Core Design Components
+🧩 Entities
 ATM
+
+Controls user flow
+
+Maintains ATM state
 
 Card
 
+Links to a single account
+
 Account
 
-Transaction
+Stores balance and PIN
+
+Handles balance operations
 
 CashDispenser
 
-Enums
+Dispenses and accepts cash
 
-TransactionType (WITHDRAW, DEPOSIT, BALANCE)
+Transaction
 
-ATMState (IDLE, CARD_INSERTED, AUTHENTICATED)
+Logs each user action
 
-6️⃣ Storage / Data Design
+🔢 Enums
+enum class TransactionType {
+    WITHDRAW,
+    DEPOSIT,
+    BALANCE
+};
+
+enum class ATMState {
+    IDLE,
+    CARD_INSERTED,
+    AUTHENTICATED
+};
+
+🗄️ Data / Storage Design
 Account
-- accountNumber
-- balance
-- pin
+
+accountNumber
+
+balance
+
+pin
 
 ATM
-- totalCash
-- currentState
 
-Transactions
-- transactionId
-- type
-- amount
+totalCash
 
-7️⃣ Class Responsibility Breakdown
+currentState
+
+Transaction
+
+transactionId
+
+type
+
+amount
+
+🧩 Class Responsibility Breakdown
 ATM
 
-Controls flow
+Controls workflow
 
-Maintains state
+Handles state transitions
 
 Account
 
 Stores balance & PIN
 
-Balance operations
+Updates balance
 
 Card
 
-Links to account
+Connects ATM to account
 
 CashDispenser
 
-Dispenses & accepts cash
+Manages physical cash
 
 Transaction
 
-Logs actions
+Records all operations
 
 ✔️ Clear separation of concerns
 
-8️⃣ API / Method Design
+🔌 API / Method Design
 bool authenticate(int pin);
 double checkBalance();
 bool withdraw(double amount);
 void deposit(double amount);
 void ejectCard();
 
-9️⃣ Design Patterns (Bonus)
+🧠 Design Patterns Used (Bonus)
 
-State Pattern → ATM states
+State Pattern
+→ Handles ATM states (IDLE, CARD_INSERTED, AUTHENTICATED)
 
-Strategy (future) → different authentication methods
+Strategy Pattern (Future Scope)
+→ Different authentication methods (PIN, OTP, Biometrics)
 
-Mention lightly.
+Mention lightly in interviews.
 
-🔟 Flow Explanation (MOST IMPORTANT)
-Withdrawal Flow
+🔄 Flow Explanation (Most Important)
+💵 Withdrawal Flow
 
 User inserts card
 
@@ -163,34 +180,38 @@ User enters PIN
 
 Authentication succeeds
 
-User selects withdraw
+User selects Withdraw
 
-Balance checked
+Balance is checked
 
-Cash dispensed
+Cash is dispensed
 
-Balance updated
+Balance is updated
 
-Card ejected
+Card is ejected
 
-🟢 This proves correctness.
+🟢 This proves system correctness
 
-1️⃣1️⃣ Data Structure Choices
-Purpose	Structure	Reason
+📊 Data Structure Choices
+Purpose	Data Structure	Reason
 Accounts	unordered_map	O(1) lookup
-Transactions	vector	Ordered log
-ATM State	enum class	Safe states
-1️⃣2️⃣ Language (C++)
+Transactions	vector	Ordered logging
+ATM State	enum class	Type safety
+💻 Language & Tech Stack
+
+Language: C++
+
+Features Used:
 
 enum class
 
 unordered_map
 
-Clean STL
+STL containers
 
-No raw pointers misuse
+No raw pointer misuse
 
-1️⃣3️⃣ Naming & Readability
+✨ Naming & Readability
 
 authenticate()
 
@@ -198,4 +219,4 @@ withdrawCash()
 
 checkBalance()
 
-Professional and readable.
+✔️ Professional, readable, interview-friendly
